@@ -5,7 +5,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	ChangeWindowMode(TRUE);
 	ChangeWindowMode(TRUE);
 	DxLib_Init();
-	SetGraphMode(80,600,32);
+	SetGraphMode(800,600,32);
 	if (DxLib_Init() == -1)return -1;
 
 	int fontColor = GetColor(255,100,0);
