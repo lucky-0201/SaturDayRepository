@@ -1,20 +1,21 @@
 #pragma once
 
-#include"Collisiion.h"
+#include "Collision.h"
 
 class Map
 {
 private:
-	int mapChipImg[2];
+
+    int mapChipImg[2];
+
 
 public:
 
-	void Init();
+    void Init();
 
-	void Draw();
+    void Draw();
 
-	void Finalize();
+    void Finalize();
 
-	bool CheckCollision(Collision & collision);
+    bool CheckCollision(Collision& collision);
 };
-

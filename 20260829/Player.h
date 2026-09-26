@@ -1,58 +1,70 @@
 #pragma once
 
-#include"Collisiion.h"
+#include "Collision.h"
 
 class Player
 {
 private:
-	float x;
-	float y;
 
-	float velocityX;
-	float velocityY;
+    float x;
+    float y;
 
-	//ジャンプ
-	bool jumpFlag;
-	bool groundFlag;
-	bool headHitFlag;
+    float velocityX;
+    float velocityY;
 
-	//ジャンプキー
-	bool previousJump;
+    // ジャンプ
+    bool jumpFlag;
+    bool groundFlag;
+    bool headHitFlag;
 
-	//アニメーション
-	float animationTimer;
 
-	int animationType;
-	int animationpattern;
+    // ジャンプキー
+    bool previousJump;
 
-	//画像
-	int playerImg[3 * 4];
 
-	//コライダー
-	Collision collision;//本体の当たり判定
-	Collision footCollision;//足元の当たり判定
-	Collision headCollision;//頭の当たり判定
+    // アニメーション
+    float animationTimer;
+
+    int animationType;
+    int animationPattern;
+
+
+    // 画像
+    int playerImg[3 * 4];
+
+
+    // コライダー
+    Collision collision;
+    Collision footCollision;
+    Collision headCollision;
+
 
 public:
 
-	void Init();
+    void Init();
 
-	void Update(float deltaTime);
+    void Update(float deltaTime);
 
-	void Draw();
+    void Draw();
 
-	void Finalize();
+    void Finalize();
 
-	Collision GetCollision() const;
-	Collision GetFootCollision() const;
-	Collision GetHeadCollision() const;
 
-	void FixCollision(const Collision& collision);
+    Collision GetCollision() const;
 
-	void SetGround(bool ground);
+    Collision GetFootCollision() const;
 
-	void SetHeadHit(bool hit);
+    Collision GetHeadCollision() const;
+
+
+    void FixCollision(const Collision& collision);
+
+    void SetGround(bool ground);
+
+    void SetHeadHit(bool hit);
+
 
 private:
-	void Move(float deltaTime);
+
+    void Move(float deltaTime);
 };
