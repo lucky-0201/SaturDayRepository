@@ -22,11 +22,11 @@ namespace Config
 	constexpr int MAP_EMPTY = 0;
 
 	//マップファイル
-	constexpr char MAP_CHIP_IMAGE_PATH[] = "date/island .png";
-	constexpr char MAP_HIT_CSV_PATH[] = "date/islamd_hit.csv";
-	constexpr char MAP_BACK_CSV_PATH[] = "date/islamd_back.csv";
-	constexpr char MAP_BASE_CSV_PATH[] = "date/island_base.csv";
-	constexpr char MAP_NEAR_CSV_PATH[] = "date/island_near.csv";
+	constexpr char MAP_CHIP_IMAGE_PATH[] = "deta/Island .png";
+	constexpr char MAP_HIT_CSV_PATH[] = "deta/island_hit.csv";
+	constexpr char MAP_BACK_CSV_PATH[] = "deta/island_back.csv";
+	constexpr char MAP_BASE_CSV_PATH[] = "deta/island_base.csv";
+	constexpr char MAP_NEAR_CSV_PATH[] = "deta/island_near.csv";
 
 
 
