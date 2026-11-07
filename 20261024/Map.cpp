@@ -1,31 +1,24 @@
 #include "Map.h"
-#include"DxLib.h"
+#include "Dxlib.h"
 
 #include<fstream>
 #include<sstream>
 #include<string>
 
-
-//コンストラクタ============================================//
-Map::Map() : mapXNum(0), mapYNum(0), isInitialized(false)
+Map::Map() :mapXNum(0), mapYNum(0), isInitialized(false)
 {
-	for (int i = 0;i < Config::MAP_CHIP_IMAGE_COUNT;i++)
+	for (int i = 0; i < Config::MAP_CHIP_IMAGE_COUNT; i++)
 	{
-		chipImages[i] = -1;//-1として存在させてください
+		chipImages[i] = -1;
 	}
 }
-//==========================================================//
 
-
-//デストラクタ==============================================//
 Map::~Map()
 {
 	Finalize();
 }
-//==========================================================//
 
-
-//初期化====================================================//
+//初期化
 bool Map::Init()
 {
 	Finalize();
@@ -33,18 +26,18 @@ bool Map::Init()
 	//画像をチップ単位に分割して読み込み
 	if (LoadDivGraph(Config::MAP_CHIP_IMAGE_PATH,
 		Config::MAP_CHIP_IMAGE_COUNT,
-		Config::MAP_CHIP_IMAGE_COLOMNS,
+		Config::MAP_CHIP_IMAGE_COLUMNS,
 		Config::MAP_CHIP_IMAGE_ROWS,
-		Config::MAP_CHIP_SIZE,Config::MAP_CHIP_SIZE,chipImages) == -1)
+		Config::MAP_CHIP_SIZE, Config::MAP_CHIP_SIZE, chipImages) == -1)
 	{
 		Finalize();
 		return false;
 	}
 
-	//CSVファイルの読み込み
-	if (!LoadMap(Config::MAP_BACK_CSV_PATH,backMap)||
-		!LoadMap(Config::MAP_BASE_CSV_PATH,baseMap)||
-		!LoadMap(Config::MAP_NEAR_CSV_PATH,nearMap))
+	//csvファイルの読み込み
+	if (!LoadMap(Config::MAP_BACK_CSV_PATH, backMap) ||
+		!LoadMap(Config::MAP_BASE_CSV_PATH, baseMap) ||
+		!LoadMap(Config::MAP_NEAR_CSV_PATH, nearMap))
 	{
 		Finalize();
 		return false;
@@ -55,15 +48,13 @@ bool Map::Init()
 	return true;
 
 }
-//===========================================================//
 
-
-//マップの読み込み==========================================//
+//マップの読み込み
 bool Map::LoadMap(const char* filePath, std::vector<std::vector<int>>& mapData)
 {
-	std::ifstream file(filePath);//ファイルを読み込ませる
+	std::ifstream file(filePath);
 
-	//ファイルの中が開かなった場合
+	//ファイルのが開かなかった場合
 	if (!file.is_open())
 	{
 		return false;
@@ -71,36 +62,40 @@ bool Map::LoadMap(const char* filePath, std::vector<std::vector<int>>& mapData)
 
 	mapData.clear();
 
-	std::string Line;
+	std::string line;
 
 	//ファイルから文字列を1行ずつ取ってくる
-	while (std::getline(file,Line))
+	while (std::getline(file, line))
 	{
-
 		//文字列がなかったら
-		if (Line.empty()) 
+		if (line.empty())
 		{
 			continue;
 		}
-
 		std::vector<int>row;
-		std::stringstream LineStream(Line);//読み込まれたものを１行ずつ読み込む
+		std::stringstream lineStream(line);
 		std::string cell;
 
-		while (std::getline(LineStream,cell))
+		while (std::getline(lineStream, cell,','))
 		{
+
+			
+
 			std::stringstream cellStream(cell);
 			int value = Config::MAP_EMPTY;
 
-			if (!cellStream >> value)
+
+			if (!(cellStream >> value))
 			{
+
+				
 				return false;
 			}
 
 			row.push_back(value);
 
-			
 		}
+
 		if (row.empty())
 		{
 			return false;
@@ -111,41 +106,36 @@ bool Map::LoadMap(const char* filePath, std::vector<std::vector<int>>& mapData)
 			return false;
 		}
 		mapData.push_back(row);
+
 	}
 
 	return !mapData.empty();
 }
-//==========================================================//
-
-
-//描画======================================================//
+//描画
 void Map::Draw() const
 {
 	if (!isInitialized)
 	{
 		return;
 	}
-	//描画順：奥の背景→地面→手前 DrawLayer(backMap);
+	// 描画順：奥の背景 → 地面 → 手前    DrawLayer(backMap);
 	DrawLayer(baseMap);
 	DrawLayer(nearMap);
 }
-//==========================================================//
 
-
-//描画レイヤー==============================================//
-void Map:: DrawLayer(const std::vector<std::vector<int>>& mapDate) const
+//描画レイヤー
+void Map::DrawLayer(const std::vector<std::vector<int>>& mapData) const
 {
-	for (int y = 0; y < static_cast<int>(mapDate.size());++y)
+	for (int y = 0; y < static_cast<int>(mapData.size()); ++y)
 	{
-		for (int x = 0;x < static_cast<int>(mapDate.size());++x)
+		for (int x = 0; x < static_cast<int>(mapData[y].size()); ++x)
 		{
-			const int chipNumber = mapDate[y][x];
+			const int chipNumber = mapData[y][x];
 			if (chipNumber == Config::MAP_EMPTY)
 			{
 				continue;
 			}
-
-			//CSVのチップ番号は１始まり、画像配列の番号は０始まり
+			// CSVのチップ番号は1始まり、画像配列の番号は0始まり
 			const int chipIndex = chipNumber - 1;
 			if (chipIndex < 0 || chipIndex >= Config::MAP_CHIP_IMAGE_COUNT)
 			{
@@ -153,15 +143,13 @@ void Map:: DrawLayer(const std::vector<std::vector<int>>& mapDate) const
 			}
 			const int drawX = Config::MAP_DRAW_ORIGIN_X + x * Config::MAP_CHIP_SIZE;
 			const int drawY = Config::MAP_DRAW_ORIGIN_Y + y * Config::MAP_CHIP_SIZE;
-			DrawGraph(drawX,drawY,chipImages[chipIndex],TRUE);
+			DrawGraph(drawX, drawY, chipImages[chipIndex], TRUE);
 		}
 	}
 }
-//==========================================================//
 
-
-//描画フラグ================================================//
-bool Map::IsValidMapPosition(int mapX, int mapY)const
+//描画フラグ
+bool Map::IsValidMapPosition(int mapX, int mapY) const
 {
 	if (mapX < 0 || mapY < 0)
 	{
@@ -170,13 +158,10 @@ bool Map::IsValidMapPosition(int mapX, int mapY)const
 
 	return true;
 }
-//==========================================================//
-
-
-//終了処理==================================================//
+//終了処理
 void Map::Finalize()
 {
-	for (int i = 0;i < Config::MAP_CHIP_IMAGE_COUNT;++i)
+	for (int i = 0; i < Config::MAP_CHIP_IMAGE_COUNT; ++i)
 	{
 		if (chipImages[i] != -1)
 		{
@@ -193,5 +178,3 @@ void Map::Finalize()
 	mapYNum = 0;
 	isInitialized = false;
 }
-//==========================================================//
-

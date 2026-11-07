@@ -16,7 +16,7 @@ public:
 	Collision();
 
 	//矩形の位置と大きさを設定
-	void SetRect(int x,int y);
+	void SetRect(int x,int y,int width,int height);
 
 	//矩形の位置だけを変更
 	void SetPosiotion(int x,int y);

@@ -10,6 +10,8 @@ int WINAPI WinMain(HINSTANCE hIstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,in
 	//マップを管理するオブジェクト
 	Map map;
 
+
+
 	//マップが読み込みができなかったら
 	if (!map.Init())
 	{
